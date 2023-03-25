@@ -69,7 +69,6 @@ const searchButtonPressed = () => {
     Current.updateCurrent(currentCity.value); 
     Guests.assignGuests(countAdults.value, countChildren.value);
     Modal.updateIsShown();
-    Stays.updateStays(currentCity.value, countAdults.value+countChildren.value);
 }
 </script>
 
@@ -126,6 +125,7 @@ const searchButtonPressed = () => {
 
     .search {
         align-items: center;
+        max-width: 120px;
         display: flex;
         justify-content: center;
         background-color: #EB5757;
@@ -210,12 +210,10 @@ const searchButtonPressed = () => {
 }
 
 .tasks {
-    // visibility: hidden;
     margin-bottom: 70px;
 }
 
 .cities {
-    // visibility: hidden;
     margin: 0 0 33px;
     font-family: 'Muli', sans-serif;
     font-style: normal;

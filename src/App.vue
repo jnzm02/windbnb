@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import InputSearch from './components/InputSearch.vue'
 import StayList from './components/StayList.vue'
 import ModalWindow from './components/ModalWindow.vue'
-import items from './data/stays.json'
 import { useCurrent } from '@/stores/current'
 import { useGuests } from '@/stores/guests'
 import { useModal } from '@/stores/modal'
@@ -13,7 +13,19 @@ const Guests = useGuests()
 const Modal = useModal();
 const Stays = useStays();
 
-const data = Stays.getStays;
+const data = ref(Stays.getStays);
+
+const updateData = () => {
+  const cityName = ref("");
+  if (Current.getCurrent.startsWith('H'))
+    data.value = Stays.getStaysWithCityAndNumber("Helsinki", Guests.getGuests);
+  else if (Current.getCurrent.startsWith('T'))
+    data.value = Stays.getStaysWithCityAndNumber("Turku", Guests.getGuests);
+  else if (Current.getCurrent.startsWith('O'))
+    data.value = Stays.getStaysWithCityAndNumber("Oulu", Guests.getGuests);
+  else if (Current.getCurrent.startsWith('V'))
+    data.value = Stays.getStaysWithCityAndNumber("Vaasa", Guests.getGuests);
+} 
 
 const ShowCurrent = () => {
   const current = Current.getCurrent;
@@ -31,12 +43,14 @@ const showGuests = () => {
   return Guests.getGuests + ' guests';
 }
 
-const showNumber = () => {
-  console.log(data[0]);
-  if (data.length > 12)
+const showStayNumber = () => {
+  const stayNumber = data.value.length;
+  if (stayNumber == 1)
+    return stayNumber + " stay";
+  else if (stayNumber > 12)
     return "12+ stays";
-  else 
-    return data.length + "stays";
+  else if (stayNumber > 1) 
+    return stayNumber + " stays";
 }
 
 </script>
@@ -51,16 +65,16 @@ const showNumber = () => {
       <img src="@/components/icons/triangle.svg" alt="triangle">
       windbnb
     </div>
-    <div class="search" @click="Modal.updateIsShown">
-      <InputSearch :placeholder="ShowCurrent()"  />
-      <InputSearch :placeholder="showGuests()" />
-      <img src="@/components/icons/search_icon.svg" alt="Search">
+    <div class="search">
+      <InputSearch :placeholder="ShowCurrent()" @click="Modal.updateIsShown" />
+      <InputSearch :placeholder="showGuests()" @click="Modal.updateIsShown" />
+      <img src="@/components/icons/search_icon.svg" @click="updateData()" alt="Search">
     </div>
   </header>
   <main>
     <nav>
       <div class="title">Stays in Finland</div>
-      <div class="stays">{{ showNumber() }}</div>
+      <div class="stays">{{ showStayNumber() }}</div>
     </nav>
     <div class="list">
       <StayList :data="data" />

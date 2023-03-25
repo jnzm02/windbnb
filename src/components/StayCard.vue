@@ -33,6 +33,7 @@ const props = defineProps<{
 }
 .card {
     margin: 15px 0 12px;
+    gap: 4px;
     display: flex;
     justify-content: space-between;
     .description {
