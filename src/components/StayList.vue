@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import StayCard from './StayCard.vue'
 const props = defineProps<{
-    StayList: Number;
+    data: Object;
 }>();
 
 </script>
 
 <template>
-    <div v-for="card in StayList">
-        <StayCard />
+    <div v-for="card in data">
+        <StayCard :data="card" />
     </div>
 </template>
 

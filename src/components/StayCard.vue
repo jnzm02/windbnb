@@ -1,33 +1,26 @@
 <script lang="ts" setup>
-// const props = defineProps<{
-//     title: string;
-//     description: string;
-//     rating: number;
-//     isSuperHost: boolean;
-//     image: string;
-// }>();
-
-const data = {
-    isSuperHost: true,
-    description: "Entire house",
-    rating: 4.73,
-}
+const props = defineProps<{
+    data: Object
+}>();
 
 </script>
 
 <template>
-    <img class='card-img' src="@/components/images/room1.jpg" alt="room">
+    <img class='card-img' :src="data.photo" alt="stays_image">
     <div class="card">
         <div class="description">
-            <div class="host" v-if="data.isSuperHost">
+            <div class="host" v-if="data.superHost">
                 SUPER HOST
             </div>
-            {{ data.description }}
+            {{ data.type }}
         </div>
         <div class="rating">
             <img src="@/components/icons/star.svg" alt="">
             {{ data.rating }}
         </div>
+    </div>
+    <div class="title">
+        {{ data.title }}
     </div>
 </template>
 
@@ -35,10 +28,11 @@ const data = {
 .card-img {
     margin-top: 32px;
     width: 100%;
+    aspect-ratio: 1.468;
     border-radius: 24px;
 }
 .card {
-    margin: 24px 0;
+    margin: 15px 0 12px;
     display: flex;
     justify-content: space-between;
     .description {
@@ -66,5 +60,13 @@ const data = {
             height: 16px;
         }
     }
+}
+.title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: #333333;
+    margin-bottom: 15px;
 }
 </style>

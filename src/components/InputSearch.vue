@@ -4,11 +4,11 @@ const props = defineProps<{
 }>();
 </script>
 <template>
-    <input type="text" :placeholder="props.placeholder">
+    <div class="input">{{ placeholder }}</div>
 </template>
 
 <style langs="scss">
-input {
+.input {
     height: 55px;
     border: 1px solid transparent;
     border-radius: 16px;
@@ -16,8 +16,8 @@ input {
     font-family: 'Muli', sans-serif;
     font-size: 14px;
     line-height: 18px;
-}
-::placeholder {
-    color: #BDBDBD;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 </style>

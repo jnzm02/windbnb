@@ -1,44 +1,69 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import InputSearch from './components/InputSearch.vue'
 import StayList from './components/StayList.vue'
 import ModalWindow from './components/ModalWindow.vue'
-// import items from './data/items.json'
+import items from './data/stays.json'
+import { useCurrent } from '@/stores/current'
+import { useGuests } from '@/stores/guests'
+import { useModal } from '@/stores/modal'
+import { useStays } from '@/stores/stays'
 
-const number = 13;
-const city = "Helsinki, Finland";
+const Current = useCurrent()
+const Guests = useGuests()
+const Modal = useModal();
+const Stays = useStays();
 
-const isShown = ref(false);
+const data = Stays.getStays;
 
-const updateIsShown = () => {
-  isShown.value = !isShown.value;
+const ShowCurrent = () => {
+  const current = Current.getCurrent;
+  if (current.length > 0)
+    return current;
+  return "Search for City"
 }
+
+const showGuests = () => {
+  const guests = Guests.getGuests;
+  if (guests == 0)
+    return "Add Guests"
+  if (guests == 1)
+    return "1 guest"
+  return Guests.getGuests + ' guests';
+}
+
+const showNumber = () => {
+  console.log(data[0]);
+  if (data.length > 12)
+    return "12+ stays";
+  else 
+    return data.length + "stays";
+}
+
 </script>
 
 <template>
-  <div v-if="isShown" class="modal">
+  <div v-if="Modal.getIsShown" class="modal">
     <ModalWindow />
   </div>
-  <div v-if="isShown" class="mask" @click="updateIsShown"></div>
+  <div v-if="Modal.getIsShown" class="mask" @click="Modal.updateIsShown"></div>
   <header>
     <div class="title">
       <img src="@/components/icons/triangle.svg" alt="triangle">
       windbnb
     </div>
-    <div class="search">
-      <div class="city"> {{ city }} </div>
-      <InputSearch placeholder="Add Guests" />
-      <img src="@/components/icons/search_icon.svg" alt="Search" @click="updateIsShown">
+    <div class="search" @click="Modal.updateIsShown">
+      <InputSearch :placeholder="ShowCurrent()"  />
+      <InputSearch :placeholder="showGuests()" />
+      <img src="@/components/icons/search_icon.svg" alt="Search">
     </div>
   </header>
   <main>
     <nav>
       <div class="title">Stays in Finland</div>
-      <div class="stays" v-if="number > 12">12+ stays</div>
-      <div class="stays" v-else>{{ number }} stays</div>
+      <div class="stays">{{ showNumber() }}</div>
     </nav>
     <div class="list">
-      <StayList :StayList="number" />
+      <StayList :data="data" />
     </div>
   </main>
   <footer>
@@ -125,7 +150,7 @@ nav {
 
 .list {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-column-gap: 32px;
 }
 
