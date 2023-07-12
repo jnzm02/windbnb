@@ -1,7 +1,16 @@
 <script lang="ts" setup>
 import StayCard from './StayCard.vue'
+
+interface StayCardData {
+  photo: string;
+  superHost: boolean;
+  type: string;
+  title: string;
+  rating: number;
+}
+
 const props = defineProps<{
-    data: Object;
+    data: StayCardData[];
 }>();
 
 </script>

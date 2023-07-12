@@ -13,10 +13,17 @@ const Guests = useGuests()
 const Modal = useModal();
 const Stays = useStays();
 
-const data = ref(Stays.getStays);
+interface StayCardData {
+  photo: string;
+  superHost: boolean;
+  type: string;
+  title: string;
+  rating: number;
+}
+
+const data = ref(Stays.getStays as StayCardData[]);
 
 const updateData = () => {
-  const cityName = ref("");
   if (Current.getCurrent.startsWith('H'))
     data.value = Stays.getStaysWithCityAndNumber("Helsinki", Guests.getGuests);
   else if (Current.getCurrent.startsWith('T'))
@@ -108,7 +115,7 @@ header {
     align-items: center;
     justify-content: space-between;
     border-radius: 16px;
-    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
     padding: 0 12px;
     .city {
       margin-right: 12px;

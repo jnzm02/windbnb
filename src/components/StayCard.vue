@@ -1,26 +1,35 @@
 <script lang="ts" setup>
+
+interface StayCardData {
+  photo: string;
+  superHost: boolean;
+  type: string;
+  title: string;
+  rating: number;
+}
+
 const props = defineProps<{
-    data: Object
+    data: StayCardData;
 }>();
 
 </script>
 
 <template>
-    <img class='card-img' :src="data.photo" alt="stays_image">
+    <img class='card-img' :src="data?.photo" alt="stays_image">
     <div class="card">
         <div class="description">
-            <div class="host" v-if="data.superHost">
+            <div class="host" v-if="data?.superHost">
                 SUPER HOST
             </div>
-            {{ data.type }}
+            {{ data?.type }}
         </div>
         <div class="rating">
             <img src="@/components/icons/star.svg" alt="">
-            {{ data.rating }}
+            {{ data?.rating }}
         </div>
     </div>
     <div class="title">
-        {{ data.title }}
+        {{ data?.title }}
     </div>
 </template>
 
