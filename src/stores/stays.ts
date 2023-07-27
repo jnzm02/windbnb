@@ -14,29 +14,39 @@ interface Stay {
     photo: string
 }
 
-interface Stays {
-    stays: Stay[];
-}
-
 export const useStays = defineStore({
   id: 'stays',
 
-  state: (): Stays => ({
-    stays: JSON.parse(JSON.stringify(items))
+  state: () => ({
+    stays: JSON.parse(JSON.stringify(items)),
+    currentStays: JSON.parse(JSON.stringify(items)),
+    stayNumber: JSON.parse(JSON.stringify(items)).length
   }),
 
   getters: {
     getStays() :Stay[] {
-        return this.stays;
+      for (const item of this.stays) {
+        console.log(item);
+      }
+      return this.stays;
     },
     getStaysWithCityAndNumber: (state) => (city: string, guests: number) => {
         return state.stays.filter((stay: Stay) => stay.city === city && stay.maxGuests > guests);
+    },
+    getCurrentStays() :Stay[] {
+        return this.currentStays;
+    },
+    getCurrentStaysNumber() :number {
+        return this.stayNumber;
     }
   },
 
   actions: {
-    updateStays() :void {
-
+    updateStays(city: string, guests: number) :void {
+      console.log("City: '" + city + "' Guests: '" + guests + "'")
+      const allStays = this.stays;
+      this.currentStays = city ? allStays.filter((stay: Stay) => stay.city === city && stay.maxGuests > guests) : allStays;
+      this.stayNumber = this.currentStays.length;
     }
   },
 });

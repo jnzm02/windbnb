@@ -12,10 +12,10 @@ const Stays = useStays();
 
 const currentCity = ref(Current.getCurrent);
 const cities = [
-    "Helsinki, Finland",
-    "Turku, Finland",
-    "Oulu, Finland",
-    "Vaasa, Finland",
+    "Helsinki",
+    "Turku",
+    "Oulu",
+    "Vaasa",
 ]
 const countAdults = ref(Guests.getAdult);
 const countChildren = ref(Guests.getChildren);
@@ -69,6 +69,11 @@ const searchButtonPressed = () => {
     Current.updateCurrent(currentCity.value); 
     Guests.assignGuests(countAdults.value, countChildren.value);
     Modal.updateIsShown();
+    updateStays();
+}
+
+const updateStays = () => {
+    Stays.updateStays(currentCity.value, Guests.getGuests);
 }
 </script>
 
@@ -83,7 +88,7 @@ const searchButtonPressed = () => {
             <div class="bottom">{{ showGuests() }}</div>
         </div>
         <div class="search" @click="searchButtonPressed()">
-            <img src="@/components/icons/search_icon.svg" alt="Search">
+            <img src="@/components/icons/search_white.svg" alt="Search">
             Search
         </div>
         <div class="cities" :class="{close: !citiesActive}">

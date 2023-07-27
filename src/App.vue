@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import InputSearch from './components/InputSearch.vue'
 import StayList from './components/StayList.vue'
 import ModalWindow from './components/ModalWindow.vue'
@@ -21,18 +21,6 @@ interface StayCardData {
   rating: number;
 }
 
-const data = ref(Stays.getStays as StayCardData[]);
-
-const updateData = () => {
-  if (Current.getCurrent.startsWith('H'))
-    data.value = Stays.getStaysWithCityAndNumber("Helsinki", Guests.getGuests);
-  else if (Current.getCurrent.startsWith('T'))
-    data.value = Stays.getStaysWithCityAndNumber("Turku", Guests.getGuests);
-  else if (Current.getCurrent.startsWith('O'))
-    data.value = Stays.getStaysWithCityAndNumber("Oulu", Guests.getGuests);
-  else if (Current.getCurrent.startsWith('V'))
-    data.value = Stays.getStaysWithCityAndNumber("Vaasa", Guests.getGuests);
-} 
 
 const ShowCurrent = () => {
   const current = Current.getCurrent;
@@ -50,15 +38,23 @@ const showGuests = () => {
   return Guests.getGuests + ' guests';
 }
 
-const showStayNumber = () => {
-  const stayNumber = data.value.length;
+const stayNumber = computed(() => {
+  const stayNumber = Stays.getCurrentStaysNumber;
   if (stayNumber == 1)
-    return stayNumber + " stay";
+    return "1 stay";
   else if (stayNumber > 12)
     return "12+ stays";
   else if (stayNumber > 1) 
     return stayNumber + " stays";
-}
+});
+
+const stays = computed(() => {
+  return Stays.getCurrentStays;
+});
+
+const updateStay = (city, guests) => {
+  Stays.updateCurrentStays(city, guests);
+};
 
 </script>
 
@@ -72,19 +68,22 @@ const showStayNumber = () => {
       <img src="@/components/icons/triangle.svg" alt="triangle">
       windbnb
     </div>
-    <div class="search">
-      <InputSearch :placeholder="ShowCurrent()" @click="Modal.updateIsShown" />
-      <InputSearch :placeholder="showGuests()" @click="Modal.updateIsShown" />
-      <img src="@/components/icons/search_icon.svg" @click="updateData()" alt="Search">
+    <div class="search" @click="Modal.updateIsShown">
+      <InputSearch :placeholder="ShowCurrent()" />
+      <InputSearch :placeholder="showGuests()" />
+      <img src="@/components/icons/search_icon.svg" alt="Search">
     </div>
   </header>
   <main>
     <nav>
       <div class="title">Stays in Finland</div>
-      <div class="stays">{{ showStayNumber() }}</div>
+      <div class="stays">{{ stayNumber }}</div>
     </nav>
-    <div class="list">
-      <StayList :data="data" />
+    <div v-if="stays.length" class="list">
+      <StayList :data="stays" />
+    </div>
+    <div v-else class="notFound">
+      No Stays found
     </div>
   </main>
   <footer>
@@ -167,6 +166,12 @@ nav {
     color: #4F4F4F;
     align-items: center;
   }
+}
+
+.notFound {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .list {
