@@ -20,7 +20,7 @@ export const useStays = defineStore({
   state: () => ({
     stays: JSON.parse(JSON.stringify(items)),
     currentStays: JSON.parse(JSON.stringify(items)),
-    stayNumber: JSON.parse(JSON.stringify(items)).length
+    stayNumber: JSON.parse(JSON.stringify(items)).lengths
   }),
 
   getters: {
@@ -43,7 +43,6 @@ export const useStays = defineStore({
 
   actions: {
     updateStays(city: string, guests: number) :void {
-      console.log("City: '" + city + "' Guests: '" + guests + "'")
       const allStays = this.stays;
       this.currentStays = city ? allStays.filter((stay: Stay) => stay.city === city && stay.maxGuests > guests) : allStays;
       this.stayNumber = this.currentStays.length;

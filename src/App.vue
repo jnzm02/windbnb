@@ -13,15 +13,6 @@ const Guests = useGuests()
 const Modal = useModal();
 const Stays = useStays();
 
-interface StayCardData {
-  photo: string;
-  superHost: boolean;
-  type: string;
-  title: string;
-  rating: number;
-}
-
-
 const ShowCurrent = () => {
   const current = Current.getCurrent;
   if (current.length > 0)
@@ -52,8 +43,8 @@ const stays = computed(() => {
   return Stays.getCurrentStays;
 });
 
-const updateStay = (city, guests) => {
-  Stays.updateCurrentStays(city, guests);
+const updateStay = (city :string, guests :number) => {
+  Stays.updateStays(city, guests);
 };
 
 </script>
